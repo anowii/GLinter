@@ -1,1 +1,1 @@
-# GLinter
+# GLinter - A Repository Linter 
