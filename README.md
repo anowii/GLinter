@@ -16,8 +16,8 @@ The goal of GLinter is to provide a repository linter that ensures repositories 
 | **Artifacts** | RQ2.4: The system shall list all files with their complete file path that includes the word "test" | DONE    |
 | **Artifacts** | RQ2.4.1: The system shall list all folders with their complete file path that includes the word "test" | -       |
 | **Security**  | RQ3.1: The system shall facilitate a tool to check for credentials that should not be stored in the repository | -  |
-| **Artifacts** | RQ4.1: The system shall summarize the number of commits                                      | -       |
-| **Artifacts** | RQ4.2: The system shall summarize the git names of contributors                              | -       |
+| **Contributions** | RQ4.1: The system shall summarize the number of commits                                      | -       |
+| **Contributions** | RQ4.2: The system shall summarize the git names of contributors                              | -       |
 
 
 
