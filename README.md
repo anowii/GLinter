@@ -4,7 +4,7 @@
 The goal of GLinter is to provide a repository linter that ensures repositories follow best practices for structure, security, and documentation. The tool will be a CLI-based solution that allows users to quickly evaluate repositories.
 
 ## Requirements
-|**General**                                                                                             |
+|**General**                                                                                  |          |
 |---------------------------------------------------------------------------------------------|----------|
 |RQ1.1: The system shall take a URL to a GitHub repository as an argument                     |          |
 |---------------------------------------------------------------------------------------------|----------|
