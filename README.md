@@ -20,17 +20,15 @@ The goal of GLinter is to provide a repository linter that ensures repositories 
 |RQ2.4: The system shall list all files with their complete file path that includes the word test         |    DONE   |
 |RQ2.4.1: The system shall lista all folder with their complete filepath that includes the word test      |     -    |
  
+|**Security**                                                                                 |  Status  |
+|---------------------------------------------------------------------------------------------|----------|
+| RQ3.1: The system shall facilitate a tool to check for credentials that should not be stored in the
+   repository                              |   -  |
 
-**Security**
- - RQ3.1: The system shall facilitate a tool to check for credentials that should not be stored in the
-   repository
+|**Artifacts**                                                                                |  Status  |
+|---------------------------------------------------------------------------------------------|----------|
+|RQ4.1: The system shall summarize the number of commits                                      |   -      |
+|RQ4.2: The system shall summarize the git names of contributors                              |     -    |
 
-**Contributions**
-  - RQ4.1: The system shall summarize the number of commits
-  - RQ4.2: The system shall summarize the git names of contributors
 
-**Optional Requirements**
- - RQ5.1: The system shall be containerized via Docker to remove the necessity of having all dependencies
-   installed
- - RQ5.2: The system shall clone a GitHub repository locally for further inspections
- - RQ5.3: The system shall be able to batch process multiple repositories
+
