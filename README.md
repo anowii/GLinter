@@ -7,9 +7,7 @@ The goal of GLinter is to provide a repository linter that ensures repositories 
 |**General**                                                                                  |          |
 |---------------------------------------------------------------------------------------------|----------|
 |RQ1.1: The system shall take a URL to a GitHub repository as an argument                     |          |
-|---------------------------------------------------------------------------------------------|----------|
 |RQ1.2: The system shall take a folder path to a git repository as an argument                |          |
-|---------------------------------------------------------------------------------------------|----------|
 |RQ1.3: The system shall summarize all findings with an indicator for passed or failed checks |          |
 
 **Artifacts**
