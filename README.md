@@ -17,13 +17,9 @@ The goal of GLinter is to provide a repository linter that ensures repositories 
 |RQ2.1: The system shall check whether a .gitignore file exists                               |   DONE   |
 |RQ2.2: The system shall check whether a LICENSE file exists                                  |     -    |
 |RQ2.3: The system shall check whether GitHub workflow files and folder exist                 |     -    |
-|RQ2.4: The system shall list all files with their complete file path that includes the word test         |     -    |
-|RQ2.3: The system shall check whether GitHub workflow files and folder exist                 |     -    |
+|RQ2.4: The system shall list all files with their complete file path that includes the word test         |    DONE   |
+|RQ2.4.1: The system shall lista all folder with their complete filepath that includes the word test      |     -    |
  
- 
- - RQ2.3: The system shall check whether GitHub workflow files and folder exist
- - RQ2.4: The system shall list all files with their complete file path that includes the word test ✅
-    -RQ2.4.1: The system shall lista all folder with their complete filepath that includes the word test   
 
 **Security**
  - RQ3.1: The system shall facilitate a tool to check for credentials that should not be stored in the
