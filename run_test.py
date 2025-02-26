@@ -1,4 +1,4 @@
-import os, subprocess, sys, shutil
+import os, subprocess, sys, shutil, stat 
 
 #******************* COLORS  *******************#
 RED = "\033[31m"
@@ -19,7 +19,7 @@ def validPath(dirPath):
 
 def validURL(git_url):
 
-    clone_command = ["git", "clone", git_url, "GitFolder"]
+    clone_command = ["git", "clone", git_url, "GitFolder\\"]
     result = subprocess.run(clone_command, capture_output=True, text=True)
     if result.returncode != 0:
         print(f"{RED}Error :{RESET}", result.stderr)
@@ -33,13 +33,21 @@ def clean_folder():
         if not os.path.exists("GitFolder"):
             return 
         else:
-            for item in os.listdir("GitFolder"):
-                path = os.path.join("GitFolder", item)
-                if os.path.isdir(path):
-                    shutil.rmtree(path)
-                else:
-                    os.remove(path)
-        return
+            for root, dirs, file in os.walk("GitFolder"):
+                print(dirs,file)
+                #if(dirs == ".git"):
+                #    for file in dirs:
+                #        os.chmod(dirs, stat.S_IWRITE)
+                #        try:
+                #            shutil.rmtree(file)
+                #        except Exception as e:
+                #            print(f"Failed to delete folder contents: {e}")
+                #try:
+                #    shutil.rmtree(dirs)
+                #except Exception as e:
+                #    print(f"Failed to delete folder contents: {e}")
+                
+    return
 
 def checkFile(filename, check_list):
     check_list[0] = checkREAD(filename)
