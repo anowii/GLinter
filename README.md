@@ -22,8 +22,7 @@ The goal of GLinter is to provide a repository linter that ensures repositories 
  
 |**Security**                                                                                 |  Status  |
 |---------------------------------------------------------------------------------------------|----------|
-| RQ3.1: The system shall facilitate a tool to check for credentials that should not be stored in the
-   repository                              |   -  |
+| RQ3.1: The system shall facilitate a tool to check for credentials that should not be stored in the repository |     -    |                   
 
 |**Artifacts**                                                                                |  Status  |
 |---------------------------------------------------------------------------------------------|----------|
