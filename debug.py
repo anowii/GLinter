@@ -29,15 +29,30 @@ def validURL(git_url):
 
 
 def clean_folder():
-    folder_path = "GitFolder\\"
-    # PowerShell command to remove the folder and its contents
-    command = f"Remove-Item -Recurse -Force {folder_path}"
-    # Run the PowerShell command
-    try:
-        subprocess.run(["powershell", "-Command", command], check=True)
-        print(f"Successfully removed the folder: {folder_path}")
-    except subprocess.CalledProcessError as e:
-        print(f"Error occurred: {e}")
+    print("in clean folder")
+    if os.path.exists("GitFolder"):
+        if not os.path.exists("GitFolder"):
+            return 
+        else:
+            for root, dirs, file in os.walk("GitFolder"):
+                print(root,dirs,file)
+                os.chmod(dirs, stat.S_IWRITE)
+                for file in dirs:
+                    os.chmod(file, stat.S_IWRITE)
+                    os.remove(file)
+                #if(dirs == ".git"):
+                #    for file in dirs:
+                #        os.chmod(dirs, stat.S_IWRITE)
+                #        try:
+                #            shutil.rmtree(file)
+                #        except Exception as e:
+                #            print(f"Failed to delete folder contents: {e}")
+                #try:
+                #    shutil.rmtree(dirs)
+                #except Exception as e:
+                #    print(f"Failed to delete folder contents: {e}")
+                
+    return
 
 def checkFile(filename, check_list):
     check_list[0] = checkREAD(filename)
