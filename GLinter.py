@@ -6,6 +6,7 @@ import run_test
 check_artifacts = [False,False,False]
 test_files = []
 workflow_files = []
+#gitleaks.exe --path="C:\Users\Documents\GitHub\GlinterFolder\GLinter" --report="C:\Users\Documents\GitHub\GlinterFolder\GLinter\gitleaks_report.json"
 
 
 def main():
