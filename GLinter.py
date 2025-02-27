@@ -3,50 +3,73 @@ import argparse
 import re, sys
 import run_test
 
-check_list = [0,0,0,0]
+check_artifacts = [False,False,False]
 test_files = []
+workflow_files = []
+
 
 def main():
     
+    print("=" * 90, "")
+    print( "\t\t\t Welcome to the GLinter Tool!")
+    print("=" * 90, "")
     # Init Parser
     parser = argparse.ArgumentParser()
     parser.add_argument('arg1', help='Path/URL to target')
     args = parser.parse_args()
     target = args.arg1
 
-    run_test.clean_folder()
-
-    print("=" * 50, "")
-    print( "\t Welcome to the GLinter Tool!")
-    print("=" * 50, "")
     print(f"Target argument:  {target}\n")
-    print("-" * 30, "")
-        
+    run_test.clean_folder()
+    print("-" * 90, "") 
 
+    print("CHECKING FOR ARTIFACTS!")
     try:
-        print("   Checking for Artifacts!")
-        print("-" * 50, "")
-        if(run_test.validURL(target)==0):
-            print("yay")
-            sys.exit(1)
+        ################## URL ##################
+        if(re.match(r"^http", target)):
+            if (run_test.cloneURL(target)==0):
+                target = "GitFolder\\"
+                for root, dirs, files in os.walk(target, topdown=True):
+                    print(root, dirs, files)
+                    if os.path.basename(root).lower() == "workflow":
+                        workflow_files.append(["workflow",files])         
+                    if(re.search("test", os.path.basename(root), re.IGNORECASE)):
+                        temp_match = [file for file in files if re.search("test", file, re.IGNORECASE)]
+                        test_files.append([os.path.basename(root),temp_match])
+                    else:
+                        temp_match = [file for file in files if re.search("test", file, re.IGNORECASE)]
+                        if temp_match:
+                            test_files.append([os.path.basename(root),temp_match])
+                    for filename in files:
+                        run_test.checkFile(filename, check_artifacts)
+            run_test.printResults(target,check_artifacts,test_files, workflow_files)
+        ################## FOLDER ##################
         elif(run_test.validPath(target) == 0):
-            for root, dirs, files in os.walk(target):
+            #target = target.replace("\\", "\\\\")
+            for root, dirs, files in os.walk(target, topdown=True):
+                print(root, dirs, files)
+                if os.path.basename(root).lower() == "workflow":
+                    workflow_files.append(["workflow",files])         
+                if(re.search("test", os.path.basename(root), re.IGNORECASE)):
+                    temp_match = [file for file in files if re.search("test", file, re.IGNORECASE)]
+                    test_files.append([os.path.basename(root),temp_match])
+                else:
+                    temp_match = [file for file in files if re.search("test", file, re.IGNORECASE)]
+                    if temp_match:
+                        test_files.append([os.path.basename(root),temp_match])
                 for filename in files:
-                    #print(root+filename)
-                    run_test.checkFile(filename, check_list)
-                    if(re.search("test", filename, re.IGNORECASE)):
-                        test_files.append(root + filename)
-            run_test.printResults(check_list,test_files)
-            print("-" * 30, "")
+                    run_test.checkFile(filename, check_artifacts)
+            run_test.printResults(target,check_artifacts,test_files, workflow_files)
+    
 
     except argparse.ArgumentError as e:
         parser.print_help()
 
 
 
-    print("=" * 50, "\n")
-
-
+    print("=" * 90, "\n")
+    print(workflow_files)
+    print(test_files)
 
 if __name__ == "__main__":
     main()
