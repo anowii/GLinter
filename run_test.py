@@ -68,6 +68,15 @@ def checkFile(filename, check_list):
     elif checkGitIgnore(filename):
         check_list[2] = checkGitIgnore(filename)
 
+def getGitSummary(target_folder):
+    target_folder = target_folder.replace("\\", "\\")
+    log_command = ["git", "log", "--pretty=format:%an", "--", target_folder]
+    result = subprocess.run(log_command, capture_output=True, text=True, check=True)
+    if result.returncode != 0:
+        print(f"{RED}Error (url) :{RESET}", result.stderr)
+        sys.exit(1)
+    else:
+        print(result)
 
 def getNumberOfFiles(target_folder):
     count  = 0
@@ -139,4 +148,5 @@ def printResults(target_folder, check_list, test_files, workflow_list):
             print(f"|     |",f"  {dir} --> {files}")
     else:
         print(f"| N/A | Filename w/ test")
-    print("-" * 90, "")
+
+        
