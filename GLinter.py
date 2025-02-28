@@ -48,7 +48,7 @@ def main():
         elif(run_test.validPath(target) == 0):
             #target = target.replace("\\", "\\\\")
             for root, dirs, files in os.walk(target, topdown=True):
-                print(root, dirs, files)
+                #print(root, dirs, files)
                 if os.path.basename(root).lower() == "workflow":
                     workflow_files.append(["workflow",files])         
                 if(re.search("test", os.path.basename(root), re.IGNORECASE)):
@@ -65,10 +65,18 @@ def main():
 
     except argparse.ArgumentError as e:
         parser.print_help()
-    print(f" CHECKING SECURITY {target}")
-    print("-" * 90, "") 
+    print("\n")
+    print("-" * 90, "")
+    print(f" CHECKING SECURITY  |  {target}  |")
+    print("-" * 90, "")  
     run_test.checkSecurity(target)
+    print("=" * 90, "\n")
 
+    print("\n")
+    print("-" * 90, "")
+    print(f" CONTRIBUTERS AND NUMBER OF COMMITS |  {target}  |")
+    print("-" * 90, "") 
+    run_test.getGitSummary(target)
     print("=" * 90, "\n")
     #print(workflow_files)
     #print(test_files)

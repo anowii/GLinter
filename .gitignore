@@ -12,3 +12,6 @@
     /venv
     /__pycache__
     __pycache__/run_test.cpython-312.pyc
+__pycache__/run_test.cpython-312.pyc
+/venv
+gitleaks-report.json
