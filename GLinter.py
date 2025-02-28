@@ -7,12 +7,12 @@ check_artifacts = [False,False,False]
 test_files = []
 workflow_files = []
 #gitleaks.exe --path="C:\Users\Documents\GitHub\GlinterFolder\GLinter" --report="C:\Users\Documents\GitHub\GlinterFolder\GLinter\gitleaks_report.json"
-
+#https://github.com/anowii/clone-this-test.git
 
 def main():
     
     print("=" * 90, "")
-    print( "\t\t\t Welcome to the GLinter Tool!")
+    print( "\t\t\t\tWelcome to the GLinter Tool!")
     print("=" * 90, "")
     # Init Parser
     parser = argparse.ArgumentParser()
@@ -24,14 +24,14 @@ def main():
     run_test.clean_folder()
     print("-" * 90, "") 
 
-    print("CHECKING FOR ARTIFACTS!")
+    print(" CHECKING FOR ARTIFACTS")
     try:
         ################## URL ##################
         if(re.match(r"^http", target)):
             if (run_test.cloneURL(target)==0):
-                target = "GitFolder\\"
+                target = "ClonedRepo\\"
                 for root, dirs, files in os.walk(target, topdown=True):
-                    print(root, dirs, files)
+                    #print(root, dirs, files)
                     if os.path.basename(root).lower() == "workflow":
                         workflow_files.append(["workflow",files])         
                     if(re.search("test", os.path.basename(root), re.IGNORECASE)):
@@ -65,12 +65,13 @@ def main():
 
     except argparse.ArgumentError as e:
         parser.print_help()
-
-
+    print(f" CHECKING SECURITY {target}")
+    print("-" * 90, "") 
+    run_test.checkSecurity(target)
 
     print("=" * 90, "\n")
-    print(workflow_files)
-    print(test_files)
+    #print(workflow_files)
+    #print(test_files)
 
 if __name__ == "__main__":
     main()
