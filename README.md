@@ -12,12 +12,12 @@ The goal of GLinter is to provide a repository linter that ensures repositories 
 | **General**   | RQ1.3:| The system shall summarize all findings with an indicator for passed or failed checks | -       |
 | **Artifacts** | RQ2.1:| The system shall check whether a .gitignore file exists                               | DONE    |
 | **Artifacts** | RQ2.2:| The system shall check whether a LICENSE file exists                                  | -       |
-| **Artifacts** | RQ2.3:| The system shall check whether GitHub workflow files and folder exist                 | -       |
+| **Artifacts** | RQ2.3:| The system shall check whether GitHub workflow files and folder exist                 |  DONE   |
 | **Artifacts** | RQ2.4:| The system shall list all files with their complete file path that includes the word "test" | DONE    |
-| **Artifacts** | RQ2.40:| The system shall list all folders with their complete file path that includes the word "test" | -       |
-| **Security**  | RQ3.1:| The system shall facilitate a tool to check for credentials that should not be stored in the repository | -  |
-| **Contributions** | RQ4.1:| The system shall summarize the number of commits                                      | -       |
-| **Contributions** | RQ4.2:| The system shall summarize the git names of contributors                              | -       |
+| **Artifacts** | RQ2.40:| The system shall list all folders with their complete file path that includes the word "test" | HALF DONE    |
+| **Security**  | RQ3.1:| The system shall facilitate a tool to check for credentials that should not be stored in the repository | DONE |
+| **Contributions** | RQ4.1:| The system shall summarize the number of commits                                      | DONE      |
+| **Contributions** | RQ4.2:| The system shall summarize the git names of contributors                              | DONE     |
 
 
 - License folder should be checked
