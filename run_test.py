@@ -69,14 +69,35 @@ def checkFile(filename, check_list):
         check_list[2] = checkGitIgnore(filename)
 
 def getGitSummary(target_folder):
-    target_folder = target_folder.replace("\\", "\\")
-    log_command = ["git", "log", "--pretty=format:%an", "--", target_folder]
-    result = subprocess.run(log_command, capture_output=True, text=True, check=True)
-    if result.returncode != 0:
-        print(f"{RED}Error (url) :{RESET}", result.stderr)
-        sys.exit(1)
-    else:
-        print(result)
+    log_command = ["git", "shortlog", "--summary", "--numbered", "--no-merges"]
+    count = 0
+    try:
+        with open("gitstat.log", "w", encoding="utf-8") as f:
+            result = subprocess.run(log_command, cwd=target_folder, stdout=f, stderr=subprocess.PIPE, text=True, shell=True)
+        
+        if result.returncode == 0:
+            with open("gitstat.log", "r", encoding="utf-8") as log_file:
+                print("shows top 10: if there are more contributes see 'gitstat.log'")
+                print("|","~"*88)
+                for line in log_file:
+                    log = line.split()
+                    print(f"| {log[0]} {log[1]}") 
+        else:
+            print("Git command failed with return code:", result.returncode)
+            print("Error:", result.stderr)
+    
+    except FileNotFoundError as e:
+        print("Error: Git not found. Is Git installed?", e)
+        return []
+    except subprocess.CalledProcessError as e:
+        print("Error running Git command:", e)
+        return []
+    except UnicodeDecodeError as e:
+        print(f"Error reading the file due to encoding: {e}")
+        return []
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+        return []
 
 def getNumberOfFiles(target_folder):
     count  = 0
