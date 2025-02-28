@@ -20,4 +20,5 @@ The goal of GLinter is to provide a repository linter that ensures repositories 
 | **Contributions** | RQ4.2: The system shall summarize the git names of contributors                              | -       |
 
 
-
+- License folder should be checked
+- 
