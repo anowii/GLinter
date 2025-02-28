@@ -26,7 +26,7 @@ def validPath(dirPath):
         return 0
 
 def cloneURL(git_url):
-    clone_command = ["git", "clone", git_url, "GitFolder\\"]
+    clone_command = ["git", "clone", git_url, "ClonedRepo\\"]
     result = subprocess.run(clone_command, capture_output=True, text=True)
     if result.returncode != 0:
         print(f"{RED}Error (url) :{RESET}", result.stderr)
@@ -34,9 +34,16 @@ def cloneURL(git_url):
     else:
         return result.returncode
 
+def checkSecurity(target_folder):
+    command = [".\\run_gitleaks.bat",  target_folder]
+    try:
+        subprocess.run(command, text=True)
+        #print(f"| {GREEN}OK{RESET}  |",f" No secrets found ")
+    except subprocess.CalledProcessError as e:
+        print(f"Error while running Gitleaks: {e.stderr}")
 
 def clean_folder():
-    folder_path = "GitFolder\\"
+    folder_path = "ClonedRepo\\"
     command = f"Remove-Item -Recurse -Force {folder_path}"
     try:
         result = subprocess.run(

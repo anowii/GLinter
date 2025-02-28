@@ -8,7 +8,7 @@
 
 # IDEs
     .vscode/
-venv/Lib/site-packages/pip-24.2.dist-info/AUTHORS.txt
-/venv
-/__pycache__
-/GitFolder
+    venv/Lib/site-packages/pip-24.2.dist-info/AUTHORS.txt
+    /venv
+    /__pycache__
+    __pycache__/run_test.cpython-312.pyc
