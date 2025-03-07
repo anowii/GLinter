@@ -1,19 +1,18 @@
 # Python
-    *.pyc
-    *__pychache__
+*.pyc
+*__pychache__
 
 # Virtual enviroments
-    venv/
-    .venv/
+venv/
+.venv/
 
 # IDEs
-    .vscode/
-    venv/Lib/site-packages/pip-24.2.dist-info/AUTHORS.txt
-    /venv
-    /__pycache__
-    __pycache__/run_test.cpython-312.pyc
+.vscode/
+venv/Lib/site-packages/pip-24.2.dist-info/AUTHORS.txt
+/venv
+/__pycache__
+__pycache__/run_test.cpython-312.pyc
 __pycache__/run_test.cpython-312.pyc
 /venv
-gitleaks-report.json
 /ClonedRepo
 gitleaks-report.json

@@ -26,7 +26,7 @@ def main():
 
     print(" CHECKING FOR ARTIFACTS")
     try:
-        ################## URL ##################
+        #**************** CHECKS URL ****************#
         if(re.match(r"^http", target)):
             if (run_test.cloneURL(target)==0):
                 target = "ClonedRepo\\"
@@ -44,7 +44,7 @@ def main():
                     for filename in files:
                         run_test.checkFile(filename, check_artifacts)
             run_test.printResults(target,check_artifacts,test_files, workflow_files)
-        ################## FOLDER ##################
+        #**************** CHECKS FOLDER ****************#
         elif(run_test.validPath(target) == 0):
             #target = target.replace("\\", "\\\\")
             for root, dirs, files in os.walk(target, topdown=True):
