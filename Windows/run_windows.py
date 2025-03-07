@@ -1,6 +1,5 @@
 
 import os, subprocess, sys, re,platform
-
 #******************* COLORS  *******************#
 RED = "\033[31m"
 GREEN = "\033[32m"
@@ -8,6 +7,7 @@ YELLOW = "\033[33m"
 BLUE = "\033[34m"
 RESET = "\033[0m"
 #***********************************************#
+
 workflow_names = [ "build.yml",
                 "workflow.yml", 
                 "ci_pipeline.yml", 
@@ -27,7 +27,7 @@ def validPath(dirPath):
         return 0
 
 def cloneURL(git_url):
-    clone_command = ["git", "clone", git_url, "ClonedRepo\\"]
+    clone_command = ["git", "clone", git_url, "ClonedRepo"]
     result = subprocess.run(clone_command, capture_output=True, text=True)
     if result.returncode != 0:
         print(f"{RED}Error (url) :{RESET}", result.stderr)
@@ -36,10 +36,10 @@ def cloneURL(git_url):
         return result.returncode
 
 def checkSecurity(target_folder):
-    command = [".\\run_gitleaks.bat",  target_folder]
+    command = ["gitleaks detect -v --report-path gitleaks-report.json --source",  target_folder]
     try:
         subprocess.run(command, text=True)
-        #print(f"| {GREEN}OK{RESET}  |",f" No secrets found ")
+        print(f"| {GREEN}OK{RESET}  |",f" No secrets found ")
     except subprocess.CalledProcessError as e:
         print(f"Error while running Gitleaks: {e.stderr}")
 

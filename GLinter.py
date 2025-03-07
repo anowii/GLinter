@@ -1,7 +1,8 @@
-import os, GitHubRepo
+import os
+from github_repo import GitHubRepo
 import argparse
 import re, sys
-import run_test
+import func_utils
 
 check_artifacts = [False,False,False]
 test_files = []
@@ -21,56 +22,61 @@ def main():
     target = args.arg1
 
     print(f"Target argument:  {target}\n")
-    run_test.clean_folder()
+    if(func_utils.clean_folder(target_folder="ClonedRepo") == 0):
+        print("Old repo removed")
     print("-" * 90, "") 
+    print("Old repo removed")
 
-    #******  CHECK TARGET ***********#
     check_passed = False
     try:
         #**************** CHECKS URL ****************#
         if(re.match(r"^http", target)):
-            if (run_test.cloneURL(target)==0):
-                target = "ClonedRepo\\"
+            if(func_utils.cloneURL(target) != 0):
+                target = "ClonedRepo"
                 check_passed = True
         #**************** CHECKS FOLDER ****************#
-        elif(run_test.validPath(target) == 0):
-            #target = target.replace("\\", "\\\\")
+        elif(func_utils.validPath(target) != 0):
             check_passed = True
     except argparse.ArgumentError as e:
         parser.print_help()
         
     repo = GitHubRepo(target)
-
+    print(target)
     if(check_passed):
-        print(" CHECKING FOR ARTIFACTS")
-        for root, dirs, files in os.walk(target, topdown=True):
-            #print(root, dirs, files)
-            if os.path.basename(root).lower() == "workflow":
-                workflow_files.append(["workflow",files])         
-            if(re.search("test", os.path.basename(root), re.IGNORECASE)):
-                temp_match = [file for file in files if re.search("test", file, re.IGNORECASE)]
-                test_files.append([os.path.basename(root),temp_match])
-            else:
-                temp_match = [file for file in files if re.search("test", file, re.IGNORECASE)]
-                if temp_match:
-                    test_files.append([os.path.basename(root),temp_match])
-            for filename in files:
-                run_test.checkFile(filename, check_artifacts)
-        run_test.printResults(target,repo.get_artifact_list(),test_files, workflow_files)
+        print(" CHECKING FOR ARTIFACTS")    
+        func_utils.printResults(target,repo.check_artifacts,repo.test_files)
+   
+    print("-" * 90, "")
+    state, msg, list = repo.checkGitIgnore()
+    print(state,msg, list)
 
+    state, msg, list = repo.checkLicences()
+    print(state,msg, list)
 
+    state, msg, list = repo.checkWorkFlow()
+    print(state,msg, list)
+
+    state, msg, list = repo.checkTestFiles()
+    print(state,msg, list)
+
+    state, msg, list = repo.checkTestFolders()
+    print(state,msg, list)
     
+    state, msg, list = repo.checkReadMeFiles()
+    print(state,msg, list)
+
     print("\n")
     print("-" * 90, "")
     print(f" CHECKING SECURITY ")
     print("-" * 90, "")  
-    #run_test.checkSecurity(target)
+    func_utils.checkSecurity(target)
 
     print("\n")
     print("-" * 90, "")
     print(f" CONTRIBUTERS AND NUMBER OF COMMITS ")
     print("-" * 90, "") 
-    run_test.getGitSummary(target)
+    func_utils.getGitSummary(target)
+    repo.printGitSummary()
     print("=" * 90, "\n")
     #print(workflow_files)
     #print(test_files)
