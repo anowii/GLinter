@@ -1,4 +1,4 @@
-import os 
+import os, GitHubRepo
 import argparse
 import re, sys
 import run_test
@@ -24,52 +24,47 @@ def main():
     run_test.clean_folder()
     print("-" * 90, "") 
 
-    print(" CHECKING FOR ARTIFACTS")
+    #******  CHECK TARGET ***********#
+    check_passed = False
     try:
         #**************** CHECKS URL ****************#
         if(re.match(r"^http", target)):
             if (run_test.cloneURL(target)==0):
                 target = "ClonedRepo\\"
-                for root, dirs, files in os.walk(target, topdown=True):
-                    #print(root, dirs, files)
-                    if os.path.basename(root).lower() == "workflow":
-                        workflow_files.append(["workflow",files])         
-                    if(re.search("test", os.path.basename(root), re.IGNORECASE)):
-                        temp_match = [file for file in files if re.search("test", file, re.IGNORECASE)]
-                        test_files.append([os.path.basename(root),temp_match])
-                    else:
-                        temp_match = [file for file in files if re.search("test", file, re.IGNORECASE)]
-                        if temp_match:
-                            test_files.append([os.path.basename(root),temp_match])
-                    for filename in files:
-                        run_test.checkFile(filename, check_artifacts)
-            run_test.printResults(target,check_artifacts,test_files, workflow_files)
+                check_passed = True
         #**************** CHECKS FOLDER ****************#
         elif(run_test.validPath(target) == 0):
             #target = target.replace("\\", "\\\\")
-            for root, dirs, files in os.walk(target, topdown=True):
-                #print(root, dirs, files)
-                if os.path.basename(root).lower() == "workflow":
-                    workflow_files.append(["workflow",files])         
-                if(re.search("test", os.path.basename(root), re.IGNORECASE)):
-                    temp_match = [file for file in files if re.search("test", file, re.IGNORECASE)]
-                    test_files.append([os.path.basename(root),temp_match])
-                else:
-                    temp_match = [file for file in files if re.search("test", file, re.IGNORECASE)]
-                    if temp_match:
-                        test_files.append([os.path.basename(root),temp_match])
-                for filename in files:
-                    run_test.checkFile(filename, check_artifacts)
-            run_test.printResults(target,check_artifacts,test_files, workflow_files)
-    
-
+            check_passed = True
     except argparse.ArgumentError as e:
         parser.print_help()
+        
+    repo = GitHubRepo(target)
+
+    if(check_passed):
+        print(" CHECKING FOR ARTIFACTS")
+        for root, dirs, files in os.walk(target, topdown=True):
+            #print(root, dirs, files)
+            if os.path.basename(root).lower() == "workflow":
+                workflow_files.append(["workflow",files])         
+            if(re.search("test", os.path.basename(root), re.IGNORECASE)):
+                temp_match = [file for file in files if re.search("test", file, re.IGNORECASE)]
+                test_files.append([os.path.basename(root),temp_match])
+            else:
+                temp_match = [file for file in files if re.search("test", file, re.IGNORECASE)]
+                if temp_match:
+                    test_files.append([os.path.basename(root),temp_match])
+            for filename in files:
+                run_test.checkFile(filename, check_artifacts)
+        run_test.printResults(target,repo.get_artifact_list(),test_files, workflow_files)
+
+
+    
     print("\n")
     print("-" * 90, "")
     print(f" CHECKING SECURITY ")
     print("-" * 90, "")  
-    run_test.checkSecurity(target)
+    #run_test.checkSecurity(target)
 
     print("\n")
     print("-" * 90, "")

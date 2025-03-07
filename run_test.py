@@ -1,4 +1,5 @@
-import os, subprocess, sys, re
+
+import os, subprocess, sys, re,platform
 
 #******************* COLORS  *******************#
 RED = "\033[31m"
@@ -43,21 +44,33 @@ def checkSecurity(target_folder):
         print(f"Error while running Gitleaks: {e.stderr}")
 
 def clean_folder():
-    folder_path = "ClonedRepo\\"
-    command = f"Remove-Item -Recurse -Force {folder_path}"
+    folder_path = "ClonedRepo"
+    
+    # Check the OS platform
+    if platform.system() == "Windows":
+        # On Windows, use rmdir for directories
+        command = f"rmdir /S /Q {folder_path}"  # /S removes all files, /Q suppresses confirmation
+    else:
+        # On Unix-based systems, use rm -rf
+        command = f"rm -rf {folder_path}"
+
     try:
+        # Run the command to remove the folder
         result = subprocess.run(
-            ["powershell", "-Command", command], 
+            command, 
             capture_output=True,
             text=True,
-            check=True
-            )
+            check=True,
+            shell=True
+        )
         print(f"Clean up needed, removed the folder: {folder_path}")
     except subprocess.CalledProcessError as e:
-            if e.stderr and "Cannot find path" in e.stderr:
-                print(f"No clean up needed, the folder {folder_path} doesn't exist.")
-            else:
-                print(f"Error occurred, but not related to missing folder: {result.returncode}")
+        # Check if the folder doesn't exist or some other error occurred
+        if e.stderr and "Cannot find path" in e.stderr:
+            print(f"No clean up needed, the folder {folder_path} doesn't exist.")
+        else:
+            print(f"Error occurred, but not related to missing folder: {e.returncode}")
+            print(f"Error details: {e.stderr}")
 
 
 def checkFile(filename, check_list):
