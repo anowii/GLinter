@@ -3,6 +3,7 @@ from github_repo import GitHubRepo
 import argparse
 import re, sys
 import func_utils
+from security_utils import LeakChecker
 
 check_artifacts = [False,False,False]
 test_files = []
@@ -32,7 +33,7 @@ def main():
         #**************** CHECKS URL ****************#
         if(re.match(r"^http", target)):
             if(func_utils.cloneURL(target) != 0):
-                target = "ClonedRepo"
+                target = "ClonedRepo/"
                 check_passed = True
         #**************** CHECKS FOLDER ****************#
         elif(func_utils.validPath(target) != 0):
@@ -43,43 +44,23 @@ def main():
     repo = GitHubRepo(target)
     print(target)
     if(check_passed):
-        print(" CHECKING FOR ARTIFACTS")    
-        func_utils.printResults(target,repo.check_artifacts,repo.test_files)
-   
-    print("-" * 90, "")
-    state, msg, list = repo.checkGitIgnore()
-    print(state,msg, list)
+        func_utils.printBanner("Checking for artifactss")
 
-    state, msg, list = repo.checkLicences()
-    print(state,msg, list)
+        print("-" * 90, "")
+        repo.run_checks()
 
-    state, msg, list = repo.checkWorkFlow()
-    print(state,msg, list)
 
-    state, msg, list = repo.checkTestFiles()
-    print(state,msg, list)
+        
+    func_utils.printBanner("CHECKING SECURITY with gitleaks")  
+    #func_utils.checkSecurity(target)
 
-    state, msg, list = repo.checkTestFolders()
-    print(state,msg, list)
-    
-    state, msg, list = repo.checkReadMeFiles()
-    print(state,msg, list)
-
-    print("\n")
-    print("-" * 90, "")
-    print(f" CHECKING SECURITY ")
-    print("-" * 90, "")  
-    func_utils.checkSecurity(target)
-
-    print("\n")
-    print("-" * 90, "")
-    print(f" CONTRIBUTERS AND NUMBER OF COMMITS ")
-    print("-" * 90, "") 
+    func_utils.printBanner("CONTRIBUTERS AND NUMBER OF COMMITS")
     func_utils.getGitSummary(target)
     repo.printGitSummary()
     print("=" * 90, "\n")
     #print(workflow_files)
     #print(test_files)
 
+    
 if __name__ == "__main__":
     main()

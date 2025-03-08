@@ -8,6 +8,7 @@ YELLOW = "\033[33m"
 BLUE = "\033[34m"
 RESET = "\033[0m"
 #***********************************************#
+#*************** WORKFLOW NAMES  ***************#
 workflow_names = [ "build.yml",
                 "workflow.yml", 
                 "ci_pipeline.yml", 
@@ -27,15 +28,9 @@ def validPath(target_folder):
     else:
         return True, "Success"
 
-
 def cloneURL(git_url):
     clone_command = ["git", "clone", git_url, "ClonedRepo"]
     result = subprocess.run(clone_command, capture_output=True, text=True)
-    return result.returncode == 0, result.stderr
-
-def checkSecurity(target_folder):
-    command = ["gitleaks", "detect", "-v", "--report-path", "gitleaks-report.json", "--source", target_folder]
-    result = subprocess.run(command, capture_output=True, text=True)
     return result.returncode == 0, result.stderr
 
 
@@ -50,13 +45,6 @@ def clean_folder(target_folder):
     return result.returncode == 0, result.stderr
 
 
-def checkFile(filename, check_list):
-    if checkREAD(filename):
-        check_list[0] = checkREAD(filename)
-    elif checkLicense(filename):
-        check_list[1] = checkLicense(filename)
-    elif checkGitIgnore(filename):
-        check_list[2] = checkGitIgnore(filename)
 
 def getGitSummary(target_folder):
     log_command = [f"cd {target_folder} && git shortlog --summary --numbered --no-merges && cd .."]
@@ -64,6 +52,22 @@ def getGitSummary(target_folder):
         result = subprocess.run(log_command, stdout=f, stderr=subprocess.PIPE, text=True, shell=True)   
     return result.returncode == 0, result.stderr
 
+#              format = 87 - len(f"| {log[0]} {log[1]}")
+#                    print(f"| {log[0]} {log[1]}", " "*format, "|") 
+
+def printBanner(text: str):
+    text_len = 85-len(text)
+    print("-" * 90, "")
+    print(f"| {text}", " "*text_len, "|") 
+    print("-" * 90, "")
+
+
+def is_file_empty(target_path):
+    """Returns True if the file is empty, False otherwise."""
+    if os.path.getsize(target_path) == 0:
+        return 1
+    elif os.path.getsize(target_path) > 0:
+        return 2
 
 def getNumberOfFiles(target_folder):
     count  = 0
@@ -73,50 +77,18 @@ def getNumberOfFiles(target_folder):
     
 def getNumberOfFolders(target_folder):
     count  = 0
-    for root, dirs, files in os.walk(target_folder):
+    for root, dirs, _ in os.walk(target_folder):
         count += len(dirs)
     return count
 
 
 def getNumberOfTestFiles(target_folder):
     count  = 0
-    for root, dirs, files in os.walk(target_folder):
+    for root, _, files in os.walk(target_folder):
         for filename in files:
             if(re.search("test", filename, re.IGNORECASE)):
                 count += 1
     return count
 
-def checkREAD(filename):
-    return (filename == "README.md")
-
-def checkLicense(filename):
-    return (filename == "LICENSE")
-
-def checkGitIgnore(filename):
-    return (filename == ".gitignore")
-
-
-
-def printResults(target_folder, check_list, test_files):
-    print("-" * 90, "")
-    if(check_list[0]):  print(f"| {GREEN}OK{RESET}  |"," README.md")
-    else:               print(f"| {RED}N/A{RESET} |"," README.md")
-    print("-" * 90, "")
-    if(check_list[1]):  print(f"| {GREEN}OK{RESET}  |"," LICENSE")
-    else:               print(f"| {RED}N/A{RESET} |"," LICENSE")
-    print("-" * 90, "")
-
-    if(check_list[2]):  print(f"| {GREEN}OK{RESET}  |"," .gitignore")
-    else:               print(f"| {RED}N/A{RESET} |"," .gitignore")
-    print("-" * 90, "")
-
-
-    print("-" * 90, "")
-    if(test_files):
-        print(f"| OK  | Filename w/ test ({getNumberOfTestFiles(target_folder)} out of {getNumberOfFiles(target_folder)} files)")
-        for dir, files in test_files:
-            print(f"|     |",f"  {dir} --> {files}")
-    else:
-        print(f"| N/A | Filename w/ test")
 
         
