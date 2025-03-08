@@ -57,10 +57,11 @@ def getGitSummary(target_folder):
 
 def printBanner(text: str):
     text_len = 85-len(text)
-    print("-" * 90, "")
     print(f"| {text}", " "*text_len, "|") 
-    print("-" * 90, "")
 
+def printSpecialBanner(text: str):
+    text_len = 94-len(text)
+    print(f"| {text}", " "*text_len, "|") 
 
 def is_file_empty(target_path):
     """Returns True if the file is empty, False otherwise."""
