@@ -2,13 +2,9 @@ import os
 from github_repo import GitHubRepo
 import argparse
 import re, sys
-import func_utils
+import func_utils 
 from security_utils import LeakChecker
 
-check_artifacts = [False,False,False]
-test_files = []
-workflow_files = []
-#gitleaks.exe --path="C:\Users\Documents\GitHub\GlinterFolder\GLinter" --report="C:\Users\Documents\GitHub\GlinterFolder\GLinter\gitleaks_report.json"
 #https://github.com/anowii/clone-this-test.git
 
 def main():
@@ -26,7 +22,6 @@ def main():
     if(func_utils.clean_folder(target_folder="ClonedRepo") == 0):
         print("Old repo removed")
     print("-" * 90, "") 
-    print("Old repo removed")
 
     check_passed = False
     try:
@@ -42,24 +37,24 @@ def main():
         parser.print_help()
         
     repo = GitHubRepo(target)
-    print(target)
     if(check_passed):
-        func_utils.printBanner("Checking for artifactss")
-
-        print("-" * 90, "")
         repo.run_checks()
+    print("=" * 90)
 
 
-        
+    print("-" * 90)
     func_utils.printBanner("CHECKING SECURITY with gitleaks")  
     #func_utils.checkSecurity(target)
+    print("-" * 90,"\n")
 
+    
+    print("-" * 90)
     func_utils.printBanner("CONTRIBUTERS AND NUMBER OF COMMITS")
+    print("-" * 90)
+
     func_utils.getGitSummary(target)
     repo.printGitSummary()
     print("=" * 90, "\n")
-    #print(workflow_files)
-    #print(test_files)
 
     
 if __name__ == "__main__":

@@ -1,6 +1,7 @@
 import os, re
-from func_utils import RED, RESET, GREEN, workflow_names
-from github_blob import GitIgnoreCheck, WorkflowCheck,TestCheck,ReadMeCheck,LicenseCheck
+from func_utils import RED, RESET, GREEN, workflow_names,printBanner, printSpecialBanner
+from typing import List
+from repo_check import RepoCheck,LicenseCheck, ReadMeCheck, WorkflowCheck, GitIgnoreCheck, TestCheck
 
 class GitHubRepo:
     def __init__(self, folder_path: str):
@@ -8,9 +9,10 @@ class GitHubRepo:
         Initialize the GitHubRepo class with the folder path. 
         Scans the folder for test files, workflow files, and checks for artifacts.
         """
+        
  
         self.folder_path = folder_path
-        self.checks = [
+        self.checks: List[RepoCheck] = [
             ReadMeCheck(folder_path),
             LicenseCheck(folder_path),
             WorkflowCheck(folder_path),
@@ -18,14 +20,15 @@ class GitHubRepo:
             TestCheck(folder_path),
         ]
 
-    
     def run_checks(self):
         """Execute all checks."""
         for check in self.checks:
             check.run_check()
-            msg, list = check.format_results()
-            print(msg, check.score, list)
-            print("-" * 90, "")
+            msg = check.format_results()
+            print("-" * 90) 
+            printSpecialBanner(f"{msg} ({check.score} out of {check.get_max_score()})")
+            print("-" * 90)
+            check.print_formatted_list()
 
     def printGitSummary(self):
         count = 0

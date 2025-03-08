@@ -3,7 +3,7 @@
 This document outlines the system requirements and the corresponding tasks needed for implementation.
 
 ## 📌 General
-- [ ] **RQ1.1:** Support GitHub repository URLs  
+- [x] **RQ1.1:** Support GitHub repository URLs  
   - [x] Parse repository URL input  
   - [x] Clone repository to a local folder  
   - [x] Validate if it's a git repository  
@@ -13,20 +13,16 @@ This document outlines the system requirements and the corresponding tasks neede
   - [ ] Check if `.git` folder exists  
 
 - [ ] **RQ1.3:** Summarize findings with pass/fail indicators  
-  - [ ] Define a standard output format for results  
+  - [x] Define a standard output format for results  
   - [ ] Implement result aggregation logic  
-  - [ ] Assign pass/fail status for each check  
+  - [x] Assign pass/fail status for each check  
 
 - [ ] **RQ1.4:** Allow configuring the clone/cache folder via config file  
-  - [ ] Implement configuration file parsing  
+  - [x] Implement configuration file parsing  
   - [ ] Allow specifying clone/cache directory  
-  - [ ] Validate user-provided paths  
+  - [x] Validate user-provided paths  
 
-- [ ] **RQ1.5:** Allow certain checks to fail (configurable)  
-  - [ ] Add config flag to define optional checks  
-  - [ ] Implement logic to skip or report warnings for optional failures  
-
-- [ ] **RQ1.6:** Return exit status codes  
+- [ ] **RQ1.5:** Return exit status codes  
   - [ ] Define exit codes (`0` for success, non-zero for failure)  
   - [ ] Implement exit code handling  
   - [ ] Test different failure scenarios  
@@ -35,21 +31,22 @@ This document outlines the system requirements and the corresponding tasks neede
 
 ## 📂 Artifacts
 - [ ] **RQ2.1:** Check if a `.gitignore` file exists  
-  - [ ] Look for `.gitignore` in the root of the repository  
-  - [ ] Output result  
+  - [x] Look for `.gitignore` in the root of the repository  
+  - [x] Output result  
+  - [ ] Final touches on output
 
 - [ ] **RQ2.2:** Check if a `LICENSE` file exists  
-  - [ ] Search for `LICENSE` or `LICENSE.txt`  
-  - [ ] Output result  
+  - [x] Search for `LICENSE` or `LICENSE.txt`  
+  - [ ] Output result / final touches
 
 - [ ] **RQ2.3:** Check if GitHub workflow files exist  
-  - [ ] Look in `.github/workflows/` directory  
+  - [x] Look in `.github/workflows/` directory  
   - [ ] Output result  
 
 - [ ] **RQ2.4:** List all files with “test” in the name  
-  - [ ] Scan repository files  
-  - [ ] Filter filenames containing “test”  
-  - [ ] Output complete file paths  
+  - [x] Scan repository files  
+  - [x] Filter filenames containing “test”  
+  - [x] Output complete file paths  
 
 - [ ] **RQ2.5:** Ignore files and directories listed in `.gitignore`  
   - [ ] Parse `.gitignore`  
@@ -66,17 +63,17 @@ This document outlines the system requirements and the corresponding tasks neede
 ---
 
 ## 👥 Contributions
-- [ ] **RQ4.1:** Summarize the number of commits  
-  - [ ] Run `git rev-list --count HEAD`  
-  - [ ] Output total commits  
+- [x] **RQ4.1:** Summarize the number of commits  
+  - [x] Run `git rev-list --count HEAD`  
+  - [x] Output total commits  
 
-- [ ] **RQ4.2:** Summarize contributor names  
-  - [ ] Run `git log --pretty=format:%an | sort -u`  
-  - [ ] Output unique contributor names  
+- [x] **RQ4.2:** Summarize contributor names  
+  - [x] Run `git log --pretty=format:%an | sort -u`  
+  - [x] Output unique contributor names  
 
-- [ ] **RQ4.3:** Rank contributions by commit count  
-  - [ ] Run `git shortlog -s -n`  
-  - [ ] Sort and display commit counts per contributor  
+- [x] **RQ4.3:** Rank contributions by commit count  
+  - [x] Run `git shortlog -s -n`  
+  - [x] Sort and display commit counts per contributor  
 
 --
 

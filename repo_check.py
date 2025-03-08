@@ -1,6 +1,5 @@
-
-import os, re
-from func_utils import RED, RESET, GREEN, is_file_empty
+import os, re, textwrap
+from func_utils import RED, RESET, YELLOW, GREEN, is_file_empty, printBanner
 
 class RepoCheck:
     """Base class for all repository checks."""
@@ -16,14 +15,16 @@ class RepoCheck:
         """Update the score based on check results."""
         self.score += value
 
+    def get_max_score(self):
+        """Return the max score for this check. Should be overridden by subclasses."""
+        pass
 
     def format_results(self):
         """Format results for output (to be overridden)."""
         pass
-
-    def get_max_score(self):
-        """Return the max score for this check. Should be overridden by subclasses."""
-        pass
+    
+    def print_formatted_list(self):
+        """Prints a formatted list"""
 
 class GitIgnoreCheck(RepoCheck):
     """Check for .gitignore files."""
@@ -48,10 +49,15 @@ class GitIgnoreCheck(RepoCheck):
         return 2*len(self.gitignore_files)
     
     def format_results(self):
-        if not self.gitignore_files :
-            return f"| {RED}N/A{RESET} |  .gitignore", self.gitignore_files
-        return f"| {GREEN}OK{RESET}  |  .gitignore", self.gitignore_files
-    
+        if not self.gitignore_files:
+            return f"{RED}N/A{RESET} |  .gitignore"
+        elif self.gitignore_files and self.score <= (self.get_max_score()/2):
+            return f"{YELLOW}MEH{RESET} |  .gitignore"
+        return f"{GREEN}OK{RESET}  |  .gitignore"
+        
+    def print_formatted_list(self):
+        for folder, _ in self.gitignore_files:
+            printBanner(f" In {folder}")
 
 class LicenseCheck(RepoCheck):
     """Check for .gitignore files."""
@@ -77,8 +83,12 @@ class LicenseCheck(RepoCheck):
     
     def format_results(self):
         if not self.license_files :
-            return f"| {RED}N/A{RESET} |  license", self.license_files
-        return f"| {GREEN}OK{RESET}  |  license", self.license_files
+            return f"{RED}N/A{RESET} |  license"
+        return f"{GREEN}OK{RESET}  |  license"
+
+    def print_formatted_list(self):
+        for folder, _ in self.license_files:
+            printBanner(f" In {folder}")
 
 class WorkflowCheck(RepoCheck):
     """Check for GitHub Actions workflows."""
@@ -89,7 +99,6 @@ class WorkflowCheck(RepoCheck):
     def run_check(self):
         """
         Checks for workflow directories/files
-        They should be in .github/workflows
         """
         for root, dirs, _ in os.walk(self.folder_path, topdown=True):
                 
@@ -108,8 +117,15 @@ class WorkflowCheck(RepoCheck):
     
     def format_results(self):
         if not self.workflow_files :
-            return f"| {RED}N/A{RESET} |  workflows", self.workflow_files
-        return f"| {GREEN}OK{RESET}  |  workflows", self.workflow_files
+            return f"{RED}N/A{RESET} |  workflows"
+        return f"{GREEN}OK{RESET}  |  workflows"
+   
+    def print_formatted_list(self):
+        for folder, files in self.workflow_files:
+            printBanner(f"In {folder}")
+            wrapped_text = textwrap.fill(", ".join(files), width=90)
+            for line in wrapped_text.split("\n"):
+                printBanner(f"   {line}")
 
 class TestCheck(RepoCheck):
     """Check for test-related files."""
@@ -119,7 +135,6 @@ class TestCheck(RepoCheck):
         self.test_files = [] 
         self.amount_folders = 0
         self.amount_files = 0
-
 
     def run_check(self):
         """
@@ -144,8 +159,15 @@ class TestCheck(RepoCheck):
 
     def format_results(self):
         if not self.test_files:
-            return f"| {RED}N/A{RESET} |  Test:f", self.test_files
-        return f"| {GREEN}OK{RESET}  |   Test:f", self.test_files
+            return f"{RED}N/A{RESET} |  Test:f"
+        return f"{GREEN}OK{RESET}  |   Test:f"
+    
+    def print_formatted_list(self):
+        for folder, files in self.test_files:
+            printBanner(f"In {folder}")
+            wrapped_text = textwrap.fill(", ".join(files), width=90)
+            for line in wrapped_text.split("\n"):
+                printBanner(f"   {line}")
 
 class ReadMeCheck(RepoCheck):
     """Check for README.md files."""
@@ -166,5 +188,9 @@ class ReadMeCheck(RepoCheck):
     
     def format_results(self):
         if not self.readMe_files:
-            return f"| {RED}N/A{RESET} |  README.MD", self.readMe_files
-        return f"| {GREEN}OK{RESET}  |   README.MD", self.readMe_files
+            return f"{RED}N/A{RESET} | README.MD"
+        return f"{GREEN}OK{RESET}  | README.MD"
+    
+    def print_formatted_list(self):
+        for folder, files in self.readMe_files:
+            printBanner(f" In {folder}")
