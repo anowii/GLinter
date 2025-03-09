@@ -63,12 +63,10 @@ This document outlines the system requirements and the corresponding tasks neede
 ---
 
 ## 👥 Contributions
-- [x] **RQ4.1:** Summarize the number of commits  
-  - [x] Run `git rev-list --count HEAD`  
+- [x] **RQ4.1:** Summarize the number of commits   
   - [x] Output total commits  
 
 - [x] **RQ4.2:** Summarize contributor names  
-  - [x] Run `git log --pretty=format:%an | sort -u`  
   - [x] Output unique contributor names  
 
 - [x] **RQ4.3:** Rank contributions by commit count  
