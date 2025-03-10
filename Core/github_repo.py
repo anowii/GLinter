@@ -1,4 +1,3 @@
-import os, re
 from Core.utils import printBanner, printSpecialBanner,subprocess
 from typing import List
 from Core.repo_check import RepoCheck,LicenseCheck, ReadMeCheck, WorkflowCheck, GitIgnoreCheck, TestFileCheck, TestFolderCheck

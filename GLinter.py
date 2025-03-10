@@ -1,8 +1,6 @@
-import os
+import re,argparse
 from Core.github_repo import GitHubRepo
-import argparse
-import re, sys
-import Core.utils as utils 
+import Core.utils as utils
 from Core.leak_checker import LeakChecker
 
 #https://github.com/anowii/clone-this-test.git
