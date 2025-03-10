@@ -1,5 +1,5 @@
 import os, re, textwrap
-from utils import RED, RESET, YELLOW, GREEN, BLUE,is_file_empty, printBanner,printSpecialBanner
+from Core.utils import RED, RESET, YELLOW, GREEN, BLUE,is_file_empty, printBanner,printSpecialBanner
 
 class RepoCheck:
     """Base class for all repository checks."""
@@ -177,6 +177,7 @@ class TestFileCheck(RepoCheck):
         Checks for test-related files or directories
         """
         for root, dirs, files in os.walk(self.folder_path):
+            print(files)
             matched_files = [file for file in files if re.search("test", file, re.IGNORECASE)]
             if matched_files:
                 self.test_files.append([root,matched_files])  
