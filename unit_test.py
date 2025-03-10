@@ -1,23 +1,23 @@
-import func_utils 
+import Core.utils as utils 
 
 def test_validPath_exists():
     return_value = True
-    success, msg = func_utils.validPath("Demo")
+    success, msg = utils.validPath("Demo")
     return return_value == success and msg
 
 def test_validPath_does_not_exist():
     return_value = False
-    failed, msg= func_utils.validPath("/some/missing/path")
+    failed, msg= utils.validPath("/some/missing/path")
     return return_value == failed and msg
 
 def test_cloneURL_success():
     returncode = 0
-    success, msg = func_utils.cloneURL("https://github.com/anowii/clone-this-test.git")
+    success, msg = utils.cloneURL("https://github.com/anowii/clone-this-test.git")
     return returncode == success and msg
 
 def test_cloneURL_failure():
     returncode = 1
-    success, msg = func_utils.cloneURL("https://github.com/nonexistent/repo.git")
+    success, msg = utils.cloneURL("https://github.com/nonexistent/repo.git")
     return returncode == success and msg
 
 if __name__ == "__main__":
