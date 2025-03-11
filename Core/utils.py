@@ -44,8 +44,6 @@ def clean_folder(target_folder):
     )
     return result.returncode == 0, result.stderr
 
-
-
 def printBanner(text: str):
     text_len = 85-len(text)
     print(f"| {text}", " "*text_len, "|") 
@@ -61,26 +59,3 @@ def is_file_empty(target_path):
     else:
         #print(target_path,  os.path.getsize(target_path))
         return 1
-
-def getNumberOfFiles(target_folder):
-    count  = 0
-    for root, dirs, files in os.walk(target_folder):
-        count += len(files)
-    return count
-    
-def getNumberOfFolders(target_folder):
-    count  = 0
-    for root, dirs, _ in os.walk(target_folder):
-        count += len(dirs)
-    return count
-
-def getNumberOfTestFiles(target_folder):
-    count  = 0
-    for root, _, files in os.walk(target_folder):
-        for filename in files:
-            if(re.search("test", filename, re.IGNORECASE)):
-                count += 1
-    return count
-
-
-        

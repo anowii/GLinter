@@ -27,6 +27,10 @@ class RepoCheck:
         """Prints a formatted list"""
         pass
 
+###########################################
+#           GIT IGNORE CHECK              #
+###########################################
+
 class GitIgnoreCheck(RepoCheck):
     """Check for .gitignore files."""
     def __init__(self, folder_path):
@@ -58,6 +62,11 @@ class GitIgnoreCheck(RepoCheck):
     def print_formatted_list(self):
         for folder, files in self.gitignore_files:
             printSpecialBanner(f"{BLUE}{folder}{RESET}")
+
+
+###########################################
+#           LICENSE CHECK                 #
+###########################################
 
 class LicenseCheck(RepoCheck):
     """Check for .gitignore files."""
@@ -92,6 +101,9 @@ class LicenseCheck(RepoCheck):
         for folder, _ in self.license_files:
             printSpecialBanner(f"{BLUE}{folder}{RESET}:")
 
+###########################################
+#          WORKFLOW    CHECK              #
+###########################################
 class WorkflowCheck(RepoCheck):
     """Check for GitHub Actions workflows."""
     def __init__(self, folder_path):
@@ -135,6 +147,11 @@ class WorkflowCheck(RepoCheck):
             for line in wrapped_text.split("\n"):
                 printBanner(f"  [{line}]")
 
+
+
+###########################################
+#           TEST FOLDER CHECK             #
+###########################################
 class TestFolderCheck(RepoCheck):
     """Check for test-related files."""
     def __init__(self, folder_path):
@@ -165,6 +182,11 @@ class TestFolderCheck(RepoCheck):
         for _,folder, _ in self.test_folders:
             printSpecialBanner(f"{BLUE}{folder}{RESET}")
 
+
+
+###########################################
+#           TEST FILE  CHECK              #
+###########################################
 class TestFileCheck(RepoCheck):
     """Check for test-related files."""
     def __init__(self, folder_path):
@@ -177,7 +199,6 @@ class TestFileCheck(RepoCheck):
         Checks for test-related files or directories
         """
         for root, dirs, files in os.walk(self.folder_path):
-            print(files)
             matched_files = [file for file in files if re.search("test", file, re.IGNORECASE)]
             if matched_files:
                 self.test_files.append([root,matched_files])  
@@ -196,6 +217,11 @@ class TestFileCheck(RepoCheck):
             wrapped_text = textwrap.fill(", ".join(files), width=90)
             for line in wrapped_text.split("\n"):
                 printBanner(f"  [{line}]")
+
+
+###########################################
+#           README CHECK                  #
+###########################################
 
 class ReadMeCheck(RepoCheck):
     """Check for README.md files."""
