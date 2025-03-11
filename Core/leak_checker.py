@@ -5,28 +5,30 @@ class LeakChecker():
     def __init__(self, target_folder: str):
             self.target_folder= target_folder
             self.gitleak_json = "gitleaks-report.json"
-            self.gitleak_folder = "Gitleaks/"
-            self._run_gitleaks
+            self.gitleak_folder = "Reports/"
+            self._run_gitleaks()
             self.gitleak_list = self.load_report()
 
     def remove_old_files(self):
-        target = self.gitleak_folder + self.gitleak_json
+        path_to_file = os.path.join(self.gitleak_folder, self.gitleak_json)
+        command = ["touch", path_to_file]
 
         if not os.path.isdir(self.gitleak_folder):
             os.makedirs(self.gitleak_folder)
 
-        if os.path.exists(target):
-            os.remove(target)
+        if os.path.exists(path_to_file):
+            os.remove(path_to_file)
+        subprocess.run(command, capture_output=True,text=True)
         
         
     def _run_gitleaks(self):
         self.remove_old_files()
-        command = ["gitleaks", "detect", "-v", "--report-path", "Gitleaks/gitleaks-report.json", "--source", self.target_folder]
+        command = ["gitleaks", "detect", "-v", "--report-path", "Reports/gitleaks-report.json", "--source", self.target_folder]
         result = subprocess.run(command,capture_output=True, text=True)
         return result.returncode == 0, result.stderr
 
     def print_gitleak(self):
-        gitleaks_command = ["gitleaks", "detect", "-v", "--report-path", "Gitleaks/gitleaks-report.json", "--source", self.target_folder]
+        gitleaks_command = ["gitleaks", "detect", "-v", "--report-path", "Reports/gitleaks-report.json", "--source", self.target_folder]
         grep_command = ["grep", "-E", "commits scanned|scan completed|leaks found"]
 
         with subprocess.Popen(gitleaks_command, stdout=subprocess.PIPE) as gitleaks_proc:
@@ -42,13 +44,15 @@ class LeakChecker():
 
 
     def load_report(self):
+        print(self.gitleak_folder,self.gitleak_json)
         with open(self.gitleak_folder+self.gitleak_json, "r") as file:
             data = json.load(file)  
         return data
 
+
 """
 if __name__ == "__main__":
-    checker = LeakChecker("ClonedRepo")
+    checker = LeakChecker("../GLinter")
     print(checker.load_report())
     print(checker.print_gitleak())
 """

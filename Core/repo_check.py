@@ -1,5 +1,5 @@
 import os, re, textwrap
-from Core.utils import RED, RESET, YELLOW, GREEN, BLUE,is_file_empty, printBanner,printSpecialBanner
+from utils import RED, RESET, YELLOW, GREEN, BLUE,is_file_empty, printBanner,printSpecialBanner
 
 class RepoCheck:
     """Base class for all repository checks."""
@@ -252,3 +252,4 @@ class ReadMeCheck(RepoCheck):
     def print_formatted_list(self):
         for folder, files in self.readMe_files:
             printSpecialBanner(f"{BLUE}{folder}{RESET}")
+
