@@ -245,7 +245,7 @@ class ReadMeCheck(RepoCheck):
     def format_results(self):
         if not self.readMe_files:
             return f"{RED}FAIL{RESET} | README.MD"
-        elif self.readMe_files and self.score <= (self.get_max_score()//2):
+        elif self.readMe_files and self.score < (self.get_max_score()):
             return f"{YELLOW}WARN{RESET} | README.MD"
         return f"{GREEN}PASS{RESET}  | README.MD"
     

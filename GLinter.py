@@ -1,4 +1,4 @@
-import re,argparse, getopt, sys
+import argparse
 from Core.github_repo import GitHubRepo
 import Core.utils as utils
 from Core.leak_checker import LeakChecker
