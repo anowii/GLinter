@@ -1,5 +1,5 @@
 import os, re, textwrap
-from utils import RED, RESET, YELLOW, GREEN, BLUE,is_file_empty, printBanner,printSpecialBanner
+from .utils import RED, RESET, YELLOW, GREEN, BLUE,is_file_empty, printBanner,printSpecialBanner
 
 class RepoCheck:
     """Base class for all repository checks."""
@@ -119,11 +119,12 @@ class WorkflowCheck(RepoCheck):
             if ".github" in dirs:
                 dir_path = os.path.join(root,".github")
                 for subroot, subdirs, _ in os.walk(dir_path):
-                    if "workflows" in subdirs:
-                        dir_path = os.path.join(subroot,"workflows")
+                    if "workflow" in subdirs:
+                        dir_path = os.path.join(subroot,"workflow")
                         matched_files= [file for file in os.listdir(dir_path)]
 
                         if matched_files:
+                            print(matched_files)
                             self.workflow_files.append([dir_path, matched_files])
                             for dir_path,files in self.workflow_files:
                                 for file in files:
@@ -146,7 +147,6 @@ class WorkflowCheck(RepoCheck):
             wrapped_text = textwrap.fill(", ".join(files), width=90)
             for line in wrapped_text.split("\n"):
                 printBanner(f"  [{line}]")
-
 
 
 ###########################################
