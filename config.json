@@ -1,0 +1,10 @@
+[
+    {
+    "cloned_dirpath": "ClonedRepo/",
+    "git_leaks": true,
+    "gitignore_check": true,
+    "readme_check": true,
+    "commit_contribure_check": true,
+    "workflow_check": true 
+    }
+]
