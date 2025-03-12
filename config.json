@@ -1,6 +1,6 @@
 [
+    { "cloned_dirpath": "ClonedRepo/"},
     {
-    "cloned_dirpath": "ClonedRepo/",
     "git_leaks": true,
     "gitignore_check": true,
     "readme_check": true,

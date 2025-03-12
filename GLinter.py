@@ -44,7 +44,7 @@ def main():
             else:
                 print(msg)  
     except argparse.ArgumentError as e:
-        parser.print_help()
+        parser.print_usage()
 
     if(intial_check_passed):    
         run_program(target_path=target)

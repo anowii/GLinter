@@ -10,11 +10,10 @@ This document outlines the system requirements and the corresponding tasks neede
 
 - [ ] **RQ1.2:** Support local folder paths to Git repositories  
   - [x] Verify folder existence  
-  - [ ] Check if `.git` folder exists  
+  - [x] Check if `.git` folder exists  
 
 - [ ] **RQ1.3:** Summarize findings with pass/fail indicators  
   - [x] Define a standard output format for results  
-  - [ ] Implement result aggregation logic  
   - [x] Assign pass/fail status for each check  
 
 - [ ] **RQ1.4:** Allow configuring the clone/cache folder via config file  
