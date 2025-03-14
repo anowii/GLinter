@@ -1,4 +1,4 @@
-import os, subprocess, re
+import os, subprocess, re, argparse
 
 #***** COLORS  ******#
 RED = "\033[31m"
@@ -15,10 +15,10 @@ def validPath(target_folder):
     else:
         return True, "Success"
 
-def cloneURL(git_url):
-    clean_folder(target_folder="ClonedRepo")
+def cloneURL(git_url, target_path):
+    clean_folder(target_folder=target_path)
     if(re.match(r"^http", git_url)):
-        clone_command = ["git", "clone", git_url, "ClonedRepo"]
+        clone_command = ["git", "clone", git_url, target_path]
         result = subprocess.run(clone_command, capture_output=True, text=True)
         return result.returncode == 0, result.stderr
     else: 
@@ -40,26 +40,17 @@ def clean_folder(target_folder):
         if os.path.isdir(target_folder):
             subprocess.run(rm_command, check=True, capture_output=True,text=True)
     except Exception:
-        print("REPORT CLEANING FAILED")
+        print(f"{target_folder} CLEANING FAILED")
 
-def printBanner(text: str):
-    text_len = 85-len(text)
-    print(f"| {text}", " "*text_len, "|") 
-
-def printLines(text:str, len:int):
-    print(text*len)
-
-def printSpecialBanner(text: str):
-    text_len = 94-len(text)
-    print(f"| {text}", " "*text_len, "|") 
+def is_folder_empty(target_path):
+    return not os.listdir(target_path)
 
 def is_file_empty(target_path):
-    """Returns True if the file is empty, False otherwise."""
+    """Returns 1 if the file is empty, 0 otherwise."""
     if os.path.getsize(target_path) == 0:
-        return 0.5
-    else:
-        #print(target_path,  os.path.getsize(target_path))
         return 1
+    else:
+        return 0
     
 def is_git_repo(target_path):
     """ Run 'git status' in the target-path """
@@ -75,3 +66,54 @@ def is_git_repo(target_path):
     except:
         return False
     
+
+def parse_init():
+    """Argument parsing and return parsed arguments."""
+    parser = argparse.ArgumentParser(description="Process a url to a git repo or a path to a local folder, choose one.")
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument("--url", help="URL to git repo", type=str)
+    group.add_argument("--dir", help="Path to folder", type=str)
+    return parser, parser.parse_args()
+
+def validate_action(prompt):
+    """Ask for validation."""
+    while True:
+        response = input(f"{prompt} [Y/N]: ")
+        if response == "y":
+            return True
+        elif response == "n":
+            print("Operation canceled.")
+            return False
+        else:
+            print("Invalid input. Please enter 'y' or 'n'.")
+
+###########################################
+#                PRINTING                 #
+###########################################
+
+def printWelcomeBanner():
+    print("=" * 90, "")
+    print( "\t\t\t  Welcome to the GLinter Tool!")
+    print("=" * 90, "")
+
+def printLineBanner(prompt:str):
+    printLines("-",90)
+    printBanner(f"{prompt}")
+    printLines("-",90)
+
+def printStripeBanner(prompt:str):
+    print("\n")
+    print("=" * 90)
+    printBanner(f"{prompt}")  
+    print("=" * 90)
+
+def printBanner(text: str):
+    text_len = 85-len(text)
+    print(f"| {text}", " "*text_len, "|") 
+
+def printLines(text:str, len:int):
+    print(text*len)
+
+def printSpecialBanner(text: str):
+    text_len = 94-len(text)
+    print(f"| {text}", " "*text_len, "|") 

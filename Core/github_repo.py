@@ -28,7 +28,7 @@ class GitHubRepo:
             check.run_check()
             msg = check.format_results()
             print("-" * 90) 
-            utils.printSpecialBanner(f"{msg} Files scored ({check.score} out of {check.get_max_score()})")
+            utils.printSpecialBanner(f"{msg} : FILES CHECKED({check.get_max_score()}) : SCORE({check.score})")
             print("-" * 90)
             check.print_formatted_list()
 

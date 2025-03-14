@@ -1,5 +1,5 @@
 import os, re, textwrap
-from .utils import RED, RESET, YELLOW, GREEN, BLUE,is_file_empty, printBanner,printSpecialBanner
+from .utils import RED, RESET, YELLOW, GREEN, BLUE, is_file_empty, printBanner,printSpecialBanner
 
 class RepoCheck:
     """Base class for all repository checks."""
@@ -37,6 +37,7 @@ class GitIgnoreCheck(RepoCheck):
         super().__init__(folder_path)  
         self.gitignore_files = []  
         self.amount_of_files = 0
+        self.score = 0
 
     def run_check(self):
         """
@@ -55,13 +56,13 @@ class GitIgnoreCheck(RepoCheck):
     def format_results(self):
         if not self.gitignore_files:
             return f"{RED}FAIL{RESET} |  .gitignore"
-        elif self.gitignore_files and self.score <= (self.get_max_score()//2):
+        elif self.gitignore_files and self.score > 0 :
             return f"{YELLOW}WARN{RESET} |  .gitignore"
         return f"{GREEN}PASS{RESET}  |  .gitignore"
         
     def print_formatted_list(self):
         for folder, files in self.gitignore_files:
-            printSpecialBanner(f"{BLUE}{folder}{RESET}")
+            printSpecialBanner(f"{BLUE}{folder}{RESET}: {files}")
 
 
 ###########################################
@@ -69,10 +70,11 @@ class GitIgnoreCheck(RepoCheck):
 ###########################################
 
 class LicenseCheck(RepoCheck):
-    """Check for .gitignore files."""
+    """Check for license files."""
     def __init__(self, folder_path):
         super().__init__(folder_path)  
-        self.license_files = []  
+        self.license_files = []
+        self.score = 0
 
     def run_check(self):
         """
@@ -93,13 +95,13 @@ class LicenseCheck(RepoCheck):
     def format_results(self):
         if not self.license_files:
             return f"{RED}FAIL{RESET} | LICENSE "
-        elif self.license_files and self.score <= (self.get_max_score()//2):
+        elif self.license_files and self.score > 0 :
             return f"{YELLOW}WARN{RESET} | LICENSE"
         return f"{GREEN}PASS{RESET}  | LICENSE"
    
     def print_formatted_list(self):
-        for folder, _ in self.license_files:
-            printSpecialBanner(f"{BLUE}{folder}{RESET}:")
+        for folder, files in self.license_files:
+            printSpecialBanner(f"{BLUE}{folder}{RESET}: {files}")
 
 ###########################################
 #          WORKFLOW    CHECK              #
@@ -110,6 +112,8 @@ class WorkflowCheck(RepoCheck):
         super().__init__(folder_path)  
         self.workflow_files = []  
         self.amount_of_files = 0
+        self.score = 0
+
 
     def run_check(self):
         """
@@ -137,7 +141,7 @@ class WorkflowCheck(RepoCheck):
     def format_results(self):
         if not self.workflow_files:
             return f"{RED}FAIL{RESET} | workflow "
-        elif self.workflow_files and self.score <= (self.get_max_score()//2):
+        elif self.workflow_files and self.score > 0 :
             return f"{YELLOW}WARN{RESET} | workflow"
         return f"{GREEN}PASS{RESET}  | workflow"
    
@@ -193,6 +197,7 @@ class TestFileCheck(RepoCheck):
         super().__init__(folder_path)  
         self.test_files = [] 
         self.amount_files = 0
+        
 
     def run_check(self):
         """
@@ -229,6 +234,7 @@ class ReadMeCheck(RepoCheck):
         super().__init__(folder_path)  
         self.readMe_files = []  
         self.amount_of_files = 0
+        self.score = 0
  
     def run_check(self):
         for root, _, files in os.walk(self.folder_path, topdown=True):            
@@ -245,11 +251,11 @@ class ReadMeCheck(RepoCheck):
     def format_results(self):
         if not self.readMe_files:
             return f"{RED}FAIL{RESET} | README.MD"
-        elif self.readMe_files and self.score < (self.get_max_score()):
+        elif self.readMe_files and self.score > 0:
             return f"{YELLOW}WARN{RESET} | README.MD"
         return f"{GREEN}PASS{RESET}  | README.MD"
     
     def print_formatted_list(self):
         for folder, files in self.readMe_files:
-            printSpecialBanner(f"{BLUE}{folder}{RESET}")
+            printSpecialBanner(f"{BLUE}{folder}{RESET}: {files}")
 

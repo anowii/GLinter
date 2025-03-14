@@ -1,10 +1,9 @@
 [
-    { "cloned_dirpath": "ClonedRepo/"},
+    { "cloned_dirpath": "NewRepo"},
     {
-    "git_leaks": true,
-    "gitignore_check": true,
-    "readme_check": true,
-    "commit_contribure_check": true,
-    "workflow_check": true 
+    "git_leaks_check": true,
+    "artifact_check": true,
+    "test_check": false,
+    "commit_contribute_check": false
     }
 ]

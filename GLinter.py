@@ -2,81 +2,92 @@ import argparse
 from Core.github_repo import GitHubRepo
 import Core.utils as utils
 from Core.leak_checker import LeakChecker
+from Core.repo_config import RepoConfig
 
 #https://github.com/anowii/clone-this-test.git
 #https://github.com/anowii/test_leaks.git
 
-def main():
+DEFAULT_PATH = "ClonedRepo"
 
-    # ****** WELCOME BANNER ****** #
-    print("=" * 90, "")
-    print( "\t\t\t  Welcome to the GLinter Tool!")
-    print("=" * 90, "")
-    utils.clean_reports()
-    utils.clean_folder(target_folder="ClonedRepo")
-    # Initate Parser
-    parser = argparse.ArgumentParser(description="Process URL or path to a folder, choose one.")
-    group = parser.add_mutually_exclusive_group(required=True)
-    #group.add_argument("--file", help="Path to file", type=str)
-    group.add_argument("--url", help="URL to git repo", type=str)
-    group.add_argument("--dir", help="Path to folder", type=str)
+def main(target_path, check_list):
+    utils.printWelcomeBanner()
 
-    args = parser.parse_args()
+    intial_check_passed = inital_check(target_path)
+    if(intial_check_passed):    
+        run_program(target_path=target_path, check_list=check_list)
+    else:
+        return 0
+
+
+def inital_check(target_path):
+    parser, args = utils.parse_init()
+    intial_check_passed = False
+
     try:
-        intial_check_passed = False
         if args.url:
             print(f"Processing URL: {args.url}")
-            target = args.url
-            #****** CHECKS URL **********#
-            success, msg = utils.cloneURL(target)
-            if(success):
-                target = "ClonedRepo/"
-                intial_check_passed = True
-            else:
-                print(msg)
+            url = args.url
+            
+            intial_check_passed, msg = utils.cloneURL(git_url=url, target_path=target_path)
+            if not intial_check_passed:
+                return print(msg)
+
         elif args.dir:
             print(f"Processing folder: {args.dir}")
-            target = args.dir
+            target_path = args.dir
             #******* CHECK FOLDER **********#
-            success, msg = utils.validPath(target)
-            if(success):
-                intial_check_passed = True
-            else:
-                print(msg)  
+            intial_check_passed, msg = utils.validPath(target_folder=target_path)
+            if not intial_check_passed:
+                return print(msg)  
+            
     except argparse.ArgumentError as e:
         parser.print_usage()
+    
+    return intial_check_passed
 
-    if(intial_check_passed):    
-        run_program(target_path=target)
-    else:
-        print("FAIL")
-
-def run_program(target_path):
-        #******* CHECKING ARTIFACTS *******#
-        repo = GitHubRepo(target_path)
+def run_program(target_path, check_list):
+    
+    #******* CHECKING ARTIFACTS *******#
+    repo = GitHubRepo(target_path)
+    if(check_list.get("artifact_check")):
+        utils.printStripeBanner("CHECKING ARTIFACTS")
         repo.run_checks()
+    else:
+        utils.printStripeBanner("CHECKING ARTIFACTS: SKIPPED")
+
+    if(check_list.get("test_check")):
+        utils.printStripeBanner("LOOK FOR TEST FILES & FOLDERS")
         repo.run_check_test()
-        print("=" * 90)
-       
-        #********* CONTRIBUTERS **********#
-        utils.printLines("-",90)
-        utils.printBanner("CONTRIBUTERS & COMMITS")
-        utils.printLines("-",90)
+    else:
+        utils.printStripeBanner("LOOK FOR TEST FILES & FOLDERS: SKIPPED")
+
+    #********* CONTRIBUTERS **********#
+    if (check_list.get("commit_contribute_check")):
+        utils.printStripeBanner("CONTRIBUTERS & COMMITS")
         success, msg = repo.getGitSummary()
         if(success):
             repo.printGitSummary()
         else:
             utils.printSpecialBanner(f"{utils.RED}{msg}{utils.RESET}")
         utils.printLines("=",90)
+    else:
+        utils.printStripeBanner("CONTRIBUTERS & COMMITS : SKIPPED")
 
-        #****SECURITY w/ Gitleaks ********#
-        print("=" * 90)
-        utils.printBanner("CHECKING SECURITY with gitleaks")  
-        print("=" * 90,"\n")
+
+    #****** SECURITY w/ Gitleaks ********#
+    if (check_list.get("git_leaks_check")):
+        utils.printStripeBanner("CHECKING SECURITY with gitleaks: full report in 'Reports/gitleaks.json'")
         LeakChecker(target_folder=target_path).print_gitleak_highlights()
         LeakChecker(target_folder=target_path).print_gitleak_report()
-        print("=" * 90,"\n")
+        utils.printLines("=",90)
+    else:
+        utils.printStripeBanner("CHECKING SECURITY with gitleaks: SKIPPED")
 
     
 if __name__ == "__main__":
-    main()
+    repo_config = RepoConfig('config.json')
+    if repo_config.check_config():
+        target_path, check_list = repo_config.get_config()
+        main(target_path=target_path, check_list=check_list)
+    else:
+        print("Error: Invalid config")

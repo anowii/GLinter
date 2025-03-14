@@ -3,10 +3,10 @@ import json, os, subprocess
 
 class LeakChecker():
     def __init__(self, target_folder: str):
-            self.target_folder= target_folder
-            self.file_path = "Reports/gitleaks-report.json"
-            self._run_gitleaks()
-            self.gitleak_list = self.load_report()
+        self.target_folder= target_folder
+        self.file_path = "Reports/gitleaks-report.json"
+        self._run_gitleaks()
+        self.gitleak_list = self.load_report()
 
         
     def _run_gitleaks(self):
@@ -34,12 +34,3 @@ class LeakChecker():
         with open(self.file_path, "r") as file:
             data = json.load(file)  
         return data
-
-
-"""
-if __name__ == "__main__":
-    checker = LeakChecker("../GLinter")
-    print(checker.load_report())
-    print(checker.print_gitleak())
-"""
-    
