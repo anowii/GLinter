@@ -32,7 +32,8 @@ For further configurations with .gitignoreleaks check out: [GITLEAKS](https://gi
 
 ### Good to know 
 - All core classes and functions is found in the **Core** Folder
-- Gitleaks will produce a Report file in json format in the **Reports** folder 
+- Gitleaks will produce a report file in json format in the **Reports** folder
+- The unit_test.py is not a valuble unittest
 
 ## Best Practices 
 - The repository contains a readme.md file 
