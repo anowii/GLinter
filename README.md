@@ -30,6 +30,10 @@ In the configuration file ```config.json``` you can specify where you want the c
 ```
 For further configurations with .gitignoreleaks check out: [GITLEAKS](https://github.com/gitleaks/gitleaks)
 
+### Good to know 
+- All core classes and functions is found in the **Core** Folder
+- Gitleaks will produce a Report file in json format in the **Reports** folder 
+
 ## Best Practices 
 - The repository contains a readme.md file 
 - The repository contains a .gitignore file 
