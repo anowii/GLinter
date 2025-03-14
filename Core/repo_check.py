@@ -1,11 +1,12 @@
 import os, re, textwrap
-from .utils import RED, RESET, YELLOW, GREEN, BLUE, is_file_empty, printBanner,printSpecialBanner
+from .utils import RED, RESET, YELLOW, GREEN, BLUE, is_file_empty, printBanner,printSpecialBanner, printLines
 
 class RepoCheck:
     """Base class for all repository checks."""
     def __init__(self, folder_path):
         self.folder_path = folder_path
         self.score = 0
+        self.amount_of_files = 0
     
     def run_check(self):
         """Run the specific check (to be overridden)."""
@@ -15,8 +16,11 @@ class RepoCheck:
         """Update the score based on check results."""
         self.score += value
 
-    def get_max_score(self):
+    def get_file_amount(self):
         """Return the max score for this check. Should be overridden by subclasses."""
+        pass
+    def get_type(self):
+        """Return check type."""
         pass
 
     def format_results(self):
@@ -50,8 +54,11 @@ class GitIgnoreCheck(RepoCheck):
                     self.update_score(is_file_empty(os.path.join(root, filename)))
                     self.amount_of_files += 1
 
-    def get_max_score(self):    
-        return (1*self.amount_of_files)
+    def get_file_amount(self):    
+        return (self.amount_of_files)
+    
+    def get_type(self):
+        return "gitignore"
     
     def format_results(self):
         if not self.gitignore_files:
@@ -83,14 +90,16 @@ class LicenseCheck(RepoCheck):
         for root, _, files in os.walk(self.folder_path, topdown=True):            
             if os.path.basename(root).lower() == "license":
                 self.license_files.append([root, files])
-
             for filename in files:
                 if os.path.basename(filename).lower() == "license":
                     self.license_files.append([root,filename])
                     self.update_score(is_file_empty(os.path.join(root,filename)))
 
-    def get_max_score(self):
-        return 1*len(self.license_files)
+    def get_file_amount(self):
+        return len(self.license_files)
+    
+    def get_type(self):
+        return "license"
     
     def format_results(self):
         if not self.license_files:
@@ -118,25 +127,26 @@ class WorkflowCheck(RepoCheck):
     def run_check(self):
         """
         Checks for workflow directories/files
-        """
-        for root, dirs, _ in os.walk(self.folder_path, topdown=True):            
+        """ 
+        for root, dirs, _ in os.walk(self.folder_path, topdown=True):     
             if ".github" in dirs:
                 dir_path = os.path.join(root,".github")
-                for subroot, subdirs, _ in os.walk(dir_path):
-                    if "workflow" in subdirs:
-                        dir_path = os.path.join(subroot,"workflow")
-                        matched_files= [file for file in os.listdir(dir_path)]
-
-                        if matched_files:
-                            print(matched_files)
-                            self.workflow_files.append([dir_path, matched_files])
-                            for dir_path,files in self.workflow_files:
-                                for file in files:
-                                    self.update_score(is_file_empty(os.path.join(dir_path, file)))
-                                    self.amount_of_files += 1
-
-    def get_max_score(self):
-        return (1*self.amount_of_files)
+                if "workflow" in os.listdir(dir_path):
+                    dir_path = os.path.join(dir_path,"workflow")        
+                    matched_files= [file for file in os.listdir(dir_path)]
+                    if matched_files:
+                        self.workflow_files.append([dir_path, matched_files])
+                        
+        for dir_path,files in self.workflow_files:
+            for file in files:
+                self.update_score(is_file_empty(os.path.join(dir_path, file)))
+                self.amount_of_files += 1
+    
+    def get_file_amount(self):
+        return (self.amount_of_files)
+    
+    def get_type(self):
+        return "workflow"
     
     def format_results(self):
         if not self.workflow_files:
@@ -151,6 +161,7 @@ class WorkflowCheck(RepoCheck):
             wrapped_text = textwrap.fill(", ".join(files), width=90)
             for line in wrapped_text.split("\n"):
                 printBanner(f"  [{line}]")
+        printLines("-",90)
 
 
 ###########################################
@@ -174,8 +185,11 @@ class TestFolderCheck(RepoCheck):
                     dir_files = [file for file in os.listdir(dir_path) if os.path.isfile(os.path.join(dir_path, file))] 
                     self.test_folders.append([root, dir_path, len(dir_files)])
 
-    def get_max_score(self):
+    def get_file_amount(self):
         return self.amount_folders
+    
+    def get_type(self):
+        return "testfolder"
 
     def format_results(self):
         if not self.test_folders:
@@ -208,8 +222,11 @@ class TestFileCheck(RepoCheck):
             if matched_files:
                 self.test_files.append([root,matched_files])  
         
-    def get_max_score(self):
+    def get_file_amount(self):
         return 0
+
+    def get_type(self):
+        return "testfile"
 
     def format_results(self):
         if not self.test_files:
@@ -222,6 +239,7 @@ class TestFileCheck(RepoCheck):
             wrapped_text = textwrap.fill(", ".join(files), width=90)
             for line in wrapped_text.split("\n"):
                 printBanner(f"  [{line}]")
+        printLines("-",90)
 
 
 ###########################################
@@ -245,8 +263,11 @@ class ReadMeCheck(RepoCheck):
                     self.amount_of_files += 1
 
     
-    def get_max_score(self):
-        return (1*self.amount_of_files)
+    def get_file_amount(self):
+        return (self.amount_of_files)
+    
+    def get_type(self):
+        return "readme"
     
     def format_results(self):
         if not self.readMe_files:

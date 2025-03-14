@@ -56,10 +56,10 @@ def run_program(target_path, check_list):
         utils.printStripeBanner("CHECKING ARTIFACTS: SKIPPED")
 
     if(check_list.get("test_check")):
-        utils.printStripeBanner("LOOK FOR TEST FILES & FOLDERS")
+        utils.printStripeBanner("CHECK FOR TEST FILES & FOLDERS")
         repo.run_check_test()
     else:
-        utils.printStripeBanner("LOOK FOR TEST FILES & FOLDERS: SKIPPED")
+        utils.printStripeBanner("CHECK FOR TEST FILES & FOLDERS: SKIPPED")
 
     #********* CONTRIBUTERS **********#
     if (check_list.get("commit_contribute_check")):

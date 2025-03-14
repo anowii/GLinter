@@ -3,7 +3,7 @@
     {
     "git_leaks_check": true,
     "artifact_check": true,
-    "test_check": false,
-    "commit_contribute_check": false
+    "test_check": true,
+    "commit_contribute_check": true
     }
 ]

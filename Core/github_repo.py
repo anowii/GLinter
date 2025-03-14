@@ -1,7 +1,9 @@
 from Core.repo_check import RepoCheck,LicenseCheck, ReadMeCheck, WorkflowCheck, GitIgnoreCheck, TestFileCheck, TestFolderCheck
-import subprocess,os
+import subprocess
 from typing import List
 import Core.utils as utils
+
+check_names = ["readme","gitignore","license","workflow","testfolders", "testfiles"]
 
 class GitHubRepo:
     def __init__(self, folder_path: str):
@@ -28,9 +30,21 @@ class GitHubRepo:
             check.run_check()
             msg = check.format_results()
             print("-" * 90) 
-            utils.printSpecialBanner(f"{msg} : FILES CHECKED({check.get_max_score()}) : SCORE({check.score})")
+            utils.printSpecialBanner(f"{msg} : FILES CHECKED({check.get_file_amount()}) : SCORE({check.score})")
             print("-" * 90)
             check.print_formatted_list()
+
+    def get_test_type(self, check_type):
+        """Get at specific test type """
+
+        if check_type in check_names:
+            for check in self.checks:
+                if(check.get_type() == check_type):
+                    return check
+            for check in self.test_checks:
+                if(check.get_type() == check_type):
+                    return check
+        return f"Please choose a name in the list: {check_names}"
 
     def run_check_test(self):
         """Execute all checks for test folders and files."""
