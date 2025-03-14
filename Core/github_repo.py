@@ -63,14 +63,5 @@ class GitHubRepo:
                         count += 1
                         log = line.split()
                         utils.printBanner(f"{log[0]} {log[1]}")
-        
-
-"""
-if __name__ == "__main__":
-    repo = GitHubRepo("../scan_me/")
-    print(repo.getGitSummary())
-   # print(repo.printGitSummary())
-"""
-
 
 
