@@ -4,6 +4,7 @@ class RepoConfig:
     def __init__(self, json_file_path):
         self.json_file_path = json_file_path
         self.data = self.load_json()
+        self.target_path = self.data[0].get("cloned_dirpath")
 
     def load_json(self):
         """Loads and parses the JSON file."""
@@ -40,9 +41,13 @@ class RepoConfig:
         
         return True
 
+    def set_target_path(self,new_target_path:str):
+        self.target_path= new_target_path
+
     def get_cloned_dirpath(self):
         """Get the cloned directory path."""
-        return self.data[0].get("cloned_dirpath")
+        return self.target_path
+    
 
     def get_checks(self):
         """Get the checks configuration."""
@@ -51,4 +56,4 @@ class RepoConfig:
         return {}
     
     def get_config(self):
-        return self.data[0].get("cloned_dirpath"), self.data[1]
+        return self.target_path, self.data[1]

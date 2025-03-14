@@ -9,12 +9,11 @@ from Core.repo_config import RepoConfig
 
 DEFAULT_PATH = "ClonedRepo"
 
-def main(target_path, check_list):
+def main(repo_config:RepoConfig):
     utils.printWelcomeBanner()
-
-    intial_check_passed = inital_check(target_path)
+    intial_check_passed = inital_check(repo_config.get_cloned_dirpath())
     if(intial_check_passed):    
-        run_program(target_path=target_path, check_list=check_list)
+        run_program(repo_config=repo_config)
     else:
         return 0
 
@@ -34,20 +33,21 @@ def inital_check(target_path):
 
         elif args.dir:
             print(f"Processing folder: {args.dir}")
-            target_path = args.dir
             #******* CHECK FOLDER **********#
-            intial_check_passed, msg = utils.validPath(target_folder=target_path)
+            intial_check_passed, msg = utils.validPath(target_folder=args.dir)
             if not intial_check_passed:
                 return print(msg)  
-            
+            else:
+                repo_config.set_target_path(args.dir)
     except argparse.ArgumentError as e:
         parser.print_usage()
     
     return intial_check_passed
 
-def run_program(target_path, check_list):
+def run_program(repo_config:RepoConfig):
     
     #******* CHECKING ARTIFACTS *******#
+    target_path, check_list = repo_config.get_config()
     repo = GitHubRepo(target_path)
     if(check_list.get("artifact_check")):
         utils.printStripeBanner("CHECKING ARTIFACTS")
@@ -87,7 +87,6 @@ def run_program(target_path, check_list):
 if __name__ == "__main__":
     repo_config = RepoConfig('config.json')
     if repo_config.check_config():
-        target_path, check_list = repo_config.get_config()
-        main(target_path=target_path, check_list=check_list)
+        main(repo_config=repo_config)
     else:
         print("Error: Invalid config")

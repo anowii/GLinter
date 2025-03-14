@@ -1,15 +1,17 @@
-import json, os, subprocess
+import json, subprocess, os
+from Core.utils import clean_reports
 
 
 class LeakChecker():
     def __init__(self, target_folder: str):
         self.target_folder= target_folder
         self.file_path = "Reports/gitleaks-report.json"
-        self._run_gitleaks()
-        self.gitleak_list = self.load_report()
+        self.run_gitleaks()
+        self.gitleak_list = self.load_report() 
 
         
-    def _run_gitleaks(self):
+    def run_gitleaks(self):
+        clean_reports()
         command = ["gitleaks", "detect", "-v", "--report-path", self.file_path , "--source", self.target_folder]
         result = subprocess.run(command,capture_output=True, text=True)
         return result.returncode == 0, result.stderr
@@ -31,6 +33,9 @@ class LeakChecker():
 
 
     def load_report(self):
-        with open(self.file_path, "r") as file:
-            data = json.load(file)  
-        return data
+        if os.path.isfile(self.file_path):
+            with open(self.file_path, "r") as file:
+                data = json.load(file)  
+            return data
+        else:
+            return []

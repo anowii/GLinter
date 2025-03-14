@@ -59,7 +59,6 @@ class GitHubRepo:
     def getGitSummary(self):
         if(utils.is_git_repo(self.folder_path)):
             log_command = ["git", "--git-dir", f"{self.folder_path}/.git", "shortlog", "--summary", "--numbered", "--no-merges"]
-
             with open("Reports/gitstat.log", "w+", encoding="utf-8") as file:
                 result = subprocess.run(log_command, stdout=file, stderr=subprocess.PIPE, text=True,check=True)   
                 return result.returncode == 0, result.stderr
