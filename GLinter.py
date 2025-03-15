@@ -87,6 +87,7 @@ def run_program(repo_config:RepoConfig):
 if __name__ == "__main__":
     repo_config = RepoConfig('config.json')
     if repo_config.check_config():
+        utils.clean_reports()
         main(repo_config=repo_config)
     else:
         print("Error: Invalid config")

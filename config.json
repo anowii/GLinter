@@ -1,5 +1,5 @@
 [
-    { "cloned_dirpath": "NewRepo"},
+    { "cloned_dirpath": "ClonedRepo"},
     {
     "git_leaks_check": true,
     "artifact_check": true,

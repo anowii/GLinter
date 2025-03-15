@@ -11,7 +11,6 @@ class LeakChecker():
 
         
     def run_gitleaks(self):
-        clean_reports()
         command = ["gitleaks", "detect", "-v", "--report-path", self.file_path , "--source", self.target_folder]
         result = subprocess.run(command,capture_output=True, text=True)
         return result.returncode == 0, result.stderr

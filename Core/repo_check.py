@@ -17,18 +17,23 @@ class RepoCheck:
         self.score += value
 
     def get_file_amount(self):
-        """Return the max score for this check. Should be overridden by subclasses."""
+        """Return the max score for this check."""
         pass
+
+    def get_score(self):
+        """Return score."""
+        pass
+
     def get_type(self):
         """Return check type."""
         pass
 
     def format_results(self):
-        """Format results for output (to be overridden)."""
+        """Format results for output."""
         pass
     
     def print_formatted_list(self):
-        """Prints a formatted list"""
+        """Prints a formatted list."""
         pass
 
 ###########################################
@@ -59,6 +64,9 @@ class GitIgnoreCheck(RepoCheck):
     
     def get_type(self):
         return "gitignore"
+      
+    def get_score(self):
+        return self.score
     
     def format_results(self):
         if not self.gitignore_files:
@@ -100,6 +108,9 @@ class LicenseCheck(RepoCheck):
     
     def get_type(self):
         return "license"
+          
+    def get_score(self):
+        return self.score
     
     def format_results(self):
         if not self.license_files:
@@ -146,7 +157,10 @@ class WorkflowCheck(RepoCheck):
         return (self.amount_of_files)
     
     def get_type(self):
-        return "workflow"
+        return "workflow"  
+          
+    def get_score(self):
+        return self.score
     
     def format_results(self):
         if not self.workflow_files:
@@ -190,7 +204,10 @@ class TestFolderCheck(RepoCheck):
     
     def get_type(self):
         return "testfolder"
-
+      
+    def get_score(self):
+        return self.score
+    
     def format_results(self):
         if not self.test_folders:
             return f"{RED}FAIL{RESET} | Folders w/ test"
@@ -227,6 +244,10 @@ class TestFileCheck(RepoCheck):
 
     def get_type(self):
         return "testfile"
+    
+          
+    def get_score(self):
+        return self.score
 
     def format_results(self):
         if not self.test_files:
@@ -268,6 +289,9 @@ class ReadMeCheck(RepoCheck):
     
     def get_type(self):
         return "readme"
+    
+    def get_score(self):
+        return self.score
     
     def format_results(self):
         if not self.readMe_files:
