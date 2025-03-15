@@ -8,12 +8,13 @@ BLUE = "\033[34m"
 RESET = "\033[0m"
 #********************#
 
-def validPath(target_folder):
+def validPath(target_folder:str):
     ''' Checks if the path is valid '''
-    if not os.path.exists(target_folder):
-       return False, f"{RED}Error (folder) : Folder path does not found{RESET}"
+    isFound = os.path.exists(target_folder)
+    if (isFound == False):
+       return isFound, f"{RED}Error (folder) : Folder path not found{RESET}"
     else:
-        return True, "Success"
+        return isFound, "Success"
 
 def cloneURL(git_url, target_path):
     clean_folder(target_folder=target_path)
