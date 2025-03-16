@@ -1,4 +1,4 @@
-from Core.repo_check import RepoCheck,LicenseCheck, ReadMeCheck, WorkflowCheck, GitIgnoreCheck, TestFileCheck, TestFolderCheck
+from Core.RepoCheckers import RepoCheck, ReadMeCheck, GitIgnoreCheck,WorkflowCheck,LicenseCheck,TestFolderCheck,TestFileCheck
 import subprocess
 from typing import List
 import Core.utils as utils

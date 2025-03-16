@@ -34,7 +34,6 @@ def clean_reports():
     except Exception:
         print("REPORT CLEANING FAILED")
 
-
 def clean_folder(target_folder):    
     rm_command = ["rm", "-rf", target_folder]
     try:    
@@ -47,11 +46,11 @@ def is_folder_empty(target_path):
     return not os.listdir(target_path)
 
 def is_file_empty(target_path):
-    """Returns 1 if the file is empty, 0 otherwise."""
+    """Returns True if the file is empty, otherwise False"""
     if os.path.getsize(target_path) == 0:
-        return 1
+        return True
     else:
-        return 0
+        return False
     
 def is_git_repo(target_path):
     """ Run 'git status' in the target-path """
@@ -67,7 +66,6 @@ def is_git_repo(target_path):
     except:
         return False
     
-
 def parse_init():
     """Argument parsing and return parsed arguments."""
     parser = argparse.ArgumentParser(description="Process a url to a git repo or a path to a local folder, choose one.")
@@ -89,7 +87,7 @@ def validate_action(prompt):
             print("Invalid input. Please enter 'y' or 'n'.")
 
 ###########################################
-#                PRINTING                 #
+#        PRINTING FUNCTIONS               #
 ###########################################
 
 def printWelcomeBanner():

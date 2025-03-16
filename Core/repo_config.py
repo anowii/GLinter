@@ -3,10 +3,10 @@ import json
 class RepoConfig:
     def __init__(self, json_file_path):
         self.json_file_path = json_file_path
-        self.data = self.load_json()
+        self.data = self._load_json()
         self.target_path = self.data[0].get("cloned_dirpath")
 
-    def load_json(self):
+    def _load_json(self):
         """Loads and parses the JSON file."""
         try:
             with open(self.json_file_path, 'r') as file:
@@ -56,4 +56,6 @@ class RepoConfig:
         return {}
     
     def get_config(self):
-        return self.target_path, self.data[1]
+        if len(self.data) > 1:
+             return self.target_path, self.data[1]        
+        return {}, self.data[1]
